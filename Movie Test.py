@@ -61,9 +61,14 @@ i_movie_one = create_minformation(session, "Movie 1","red",195,130)
 i_movie_two = create_minformation(session, "Movie 2","red",195,280)
 i_movie_three = create_minformation(session, "Movie 3","red",195,430)
 
-lbllst = []
-def addlabel(location):
-    Label(location, text="Movie Seat Booking Program", font=("Arial", "16", "bold"), padx=50, pady=50, bg="red").place(x=50, y=50, height=50, width=420)
+def on_click(text):
+    tk.Label(booking, text=text, font='Helvetica 40').place(x=80, y=80)
+    if "1" in text:
+        tk.Label(booking, text="Movie 1", font='Helvetica 40').place(x=110, y=300)
+    elif "2" in text:
+        tk.Label(booking, text="Movie 2", font='Helvetica 40').place(x=110, y=300)
+    else:
+        tk.Label(booking, text="Movie 3", font='Helvetica 40').place(x=110, y=300)
 
 class create_mbutton:
     def __init__(self, location, text, bg, x, y):
@@ -73,8 +78,9 @@ class create_mbutton:
         self.x = x
         self.y = y
         self.mbuttons = tk.Button(self.location, text = self.text, bg = self.bg, 
-                             padx=0, pady=1, font=("Arial", "13", "bold"), relief="groove", borderwidth=3, command=lambda:raise_frame(booking)and addlabel()) 
+                             padx=0, pady=1, font=("Arial", "13", "bold"), relief="groove", borderwidth=3, command=lambda:(raise_frame(booking),on_click(text)))
         self.mbuttons.place(x = self.x, y=self.y)
+
 m1s1 = create_mbutton(session, "Session 1", "blue", 195, 225)
 m1s2 = create_mbutton(session, "Session 2", "blue", 295, 225)
 m1s3 = create_mbutton(session, "Session 3", "blue", 395, 225)
