@@ -61,35 +61,108 @@ i_movie_one = create_minformation(session, "Movie 1","red",195,130)
 i_movie_two = create_minformation(session, "Movie 2","red",195,280)
 i_movie_three = create_minformation(session, "Movie 3","red",195,430)
 
-def on_click(text):
-    tk.Label(booking, text=text, font='Helvetica 40').place(x=80, y=80)
-    if "1" in text:
-        tk.Label(booking, text="Movie 1", font='Helvetica 40').place(x=110, y=300)
-    elif "2" in text:
-        tk.Label(booking, text="Movie 2", font='Helvetica 40').place(x=110, y=300)
+def on_click(text, value):
+    tk.Label(booking, text=text, font='Helvetica 10', bg="red").place(x=200, y=60, height=20, width=200)
+    if value == "Movie 1":
+        tk.Label(booking, text="Movie 1", font='Helvetica 10', bg="red").place(x=0, y=60, height=20, width=180)
+    elif value == "Movie 2":
+        tk.Label(booking, text="Movie 2", font='Helvetica 10', bg="red").place(x=0, y=60, height=20, width=180)
     else:
-        tk.Label(booking, text="Movie 3", font='Helvetica 40').place(x=110, y=300)
+        tk.Label(booking, text="Movie 3", font='Helvetica 10', bg="red").place(x=0, y=60, height=20, width=180)
 
 class create_mbutton:
-    def __init__(self, location, text, bg, x, y):
+    def __init__(self, location, text, bg, x, y, value):
         self.location = location
         self.text = text
         self.bg = bg
         self.x = x
         self.y = y
         self.mbuttons = tk.Button(self.location, text = self.text, bg = self.bg, 
-                             padx=0, pady=1, font=("Arial", "13", "bold"), relief="groove", borderwidth=3, command=lambda:(raise_frame(booking),on_click(text)))
+                             padx=0, pady=1, font=("Arial", "13", "bold"), relief="groove", borderwidth=3, command=lambda:(raise_frame(booking),on_click(text, value)))
         self.mbuttons.place(x = self.x, y=self.y)
 
-m1s1 = create_mbutton(session, "Session 1", "blue", 195, 225)
-m1s2 = create_mbutton(session, "Session 2", "blue", 295, 225)
-m1s3 = create_mbutton(session, "Session 3", "blue", 395, 225)
-m2s1 = create_mbutton(session, "Session 1", "blue", 195, 375)
-m2s2 = create_mbutton(session, "Session 2", "blue", 295, 375)
-m2s3 = create_mbutton(session, "Session 3", "blue", 395, 375)
-m3s1 = create_mbutton(session, "Session 1", "blue", 195, 525)
-m3s2 = create_mbutton(session, "Session 2", "blue", 295, 525)
-m3s3 = create_mbutton(session, "Session 3", "blue", 395, 525)
+m1s1 = create_mbutton(session, "Session 1", "blue", 195, 225, "Movie 1")
+m1s2 = create_mbutton(session, "Session 2", "blue", 295, 225, "Movie 1")
+m1s3 = create_mbutton(session, "Session 3", "blue", 395, 225, "Movie 1")
+m2s1 = create_mbutton(session, "Session 1", "blue", 195, 375, "Movie 2")
+m2s2 = create_mbutton(session, "Session 2", "blue", 295, 375, "Movie 2")
+m2s3 = create_mbutton(session, "Session 3", "blue", 395, 375, "Movie 2")
+m3s1 = create_mbutton(session, "Session 1", "blue", 195, 525, "Movie 3")
+m3s2 = create_mbutton(session, "Session 2", "blue", 295, 525, "Movie 3")
+m3s3 = create_mbutton(session, "Session 3", "blue", 395, 525, "Movie 3")
+
+class create_seats:
+    def __init__(self, location, text, bg, x, y):
+        self.location = location
+        self.text = text
+        self.bg = bg
+        self.x = x
+        self.y = y
+        self.seats = tk.Button(self.location, text = self.text, bg = self.bg, 
+                             padx=3, pady=3, font=("Arial", "13", "bold"), relief="groove", borderwidth=3, command=lambda:(raise_frame(booking),seat_select(text)))
+        self.seats.place(x = self.x, y=self.y)
+
+position_x = 0
+position_y = 0
+seats_list = {}
+for row in range(ord("A"), ord("F") + 1):
+    if chr(row) == "A":
+        position_x= 115
+    elif chr(row) =="B": 
+        position_x= 160
+    elif chr(row) =="C": 
+        position_x= 205
+    elif chr(row) =="D": 
+        position_x= 250
+    elif chr(row) =="E": 
+        position_x= 295
+    else:
+        position_x= 340
+    for column in range(1, 11):
+        if column == 1:
+            position_y = 135
+        elif column ==2:
+            position_y = 180
+        elif column ==3:
+            position_y = 225
+        elif column ==4:
+            position_y = 270
+        elif column ==5:
+            position_y = 315
+        elif column ==6:
+            position_y = 360
+        elif column ==7:
+            position_y = 405
+        elif column ==8:
+            position_y = 450
+        else:
+            position_y = 495
+        seats_list[(chr(row)+str(column))] = create_seats(booking, (chr(row)+str(column)), "blue", position_x, position_y)
+        
+        #print(seats_list["A2"])
+        #seats_list = list(set(seats_list))
+for seats in seats_list:
+    print(seats)
+if "L2" in seats_list:
+    print("good morning")
+else:
+    print("hi")
+
+
+selected_seats = []
+def seat_select(text):
+    display_seats = Label(booking, text=selected_seats, padx=13, pady=10, width=35, bg="red", borderwidth=5).place(x=0, y=550)
+    if text in seats_list and text not in selected_seats:
+        selected_seats.append(text)
+        selected_seats.sort()
+    else:
+        selected_seats.remove(text)
+
+#print(seats['A2'])
+        #print(seats_list[('A2')])
+        #seats_list[(A1)].configure(font="10")
+#seats_list[(1, 1)] = create_seats(booking, "A1", "blue", 395, 525, value="Movie 3")
+#seats_list[(1, 1)] = create_seats(x=50, y=40)
 
 # Function for closing window
 def Close():
@@ -97,6 +170,7 @@ def Close():
   
 # Button for closing
 exit_button = Button(session, text="Exit", command=Close, bg="tomato2").place(x=440, y=15)
+exit_button = Button(booking, text="Exit", command=Close, bg="tomato2").place(x=440, y=15)
 
 Label(booking, text='BOOKING').pack()
 Button(booking, text='Go to TICKETING', command=lambda:raise_frame(ticketing)).pack()
