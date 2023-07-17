@@ -2,6 +2,23 @@ from tkinter import *
 import tkinter as tk
 import random
 import datetime as dt
+import random
+ 
+# initializing list
+test_list = ["A", "B", "C", "D", "E"]
+test_list2 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+ 
+# using random.choice() to
+# get a random number
+random_let = random.choice(test_list)
+random_num = random.choice(test_list2)
+ 
+# printing random number
+hippo = (str(random_let)+str(random_num))
+
+print(hippo)
+print(random_let)
+print(random_num)
 
 # Tracks users current date on device
 date = dt.datetime.now()
@@ -121,19 +138,25 @@ class seats:
         self.x = x
         self.y = y
         self.seats = tk.Button(self.location, text = self.text, bg = self.bg, 
-                             padx=3, pady=3, font=("Arial", "13", "bold"), relief="groove", borderwidth=3, command=lambda:(raise_frame(booking),seat_select(self, text)))
+                             padx=3, pady=3, font=("Arial", "7", "bold"), relief="groove", borderwidth=3, command=lambda:(raise_frame(booking),seat_select(self, text)))
         self.seats.place(x = self.x, y=self.y)
 
 # Uses the seats class to create buttons for sixty named seats
 position_x = 0
 position_y = 95
-seats_list = {}
+seats_list = []
 for row in range(ord("A"), ord("F") + 1):
     position_y = 95
     position_x = position_x +45
     for column in range(1, 11):
-        position_y=position_y+45
-        seats_list[(chr(row)+str(column))] = seats(booking, (chr(row)+str(column)), "green", position_x, position_y)
+        if column == 10:
+            position_y=position_y+45
+            seats_list.append(seats(booking, chr(row)+str(column), "yellow", position_x, position_y))
+        elif row == random_let and column == random_num:
+            seats_list.append(seats(booking, hippo, "purple", position_x, position_y))
+        else:
+            position_y=position_y+45
+            seats_list.append(seats(booking, chr(row)+str(column), "grey", position_x, position_y))
 
 # This list stores user selected seats based on what button created from the seat class they click
 selected_seats = []
@@ -144,18 +167,25 @@ def seat_select(self, text):
     # Appends seat choice to the selected_seats list and turns button clicked blue 
     # Appends only if the list has less than 10 items, and seat not already inside the list
     if text not in selected_seats and len(selected_seats) < 10:
-        self.seats.configure(bg="blue")
+        self.seats.configure(bg="green")
         selected_seats.append(text)
         selected_seats.sort()
         # Displays current selected_seats list in a label
         display_seats = Label(booking, text=selected_seats, padx=5, pady=8, width=22, bg="red", borderwidth=5).place(x=135, y=90)
     # Removes seat choice from the selected_seats list and turns button clicked green
     # Removes only if the seat choice is already inside the list
-    elif text in selected_seats:
-        self.seats.configure(bg="green")
+    elif text in selected_seats and "10" not in text:
+        self.seats.configure(bg="grey")
         selected_seats.remove(text)
         # Displays current selected_seats list in a label
         display_seats = Label(booking, text=selected_seats, padx=5, pady=8, width=22, bg="red", borderwidth=5).place(x=135, y=90)
+
+    elif text in selected_seats and "10" in text:
+        self.seats.configure(bg="yellow")
+        selected_seats.remove(text)
+        # Displays current selected_seats list in a label
+        display_seats = Label(booking, text=selected_seats, padx=5, pady=8, width=22, bg="red", borderwidth=5).place(x=135, y=90)
+    # Removes seat choice from the selected_seats list and turns button clicked green
     # If the other conditions do not apply, a definition for a help menu will be called
     else:
         help() 
@@ -175,7 +205,14 @@ help_button = Button(booking, text="Help/Info", command=lambda:(help())).place(x
 key_label = Label(booking, padx=20, bg="purple", text="Key for Seats:").place(x=355, y=100)
 
 # A button for confirming the user seats selected
-confirm_seat = Button(booking, bg="orange", text='Confirm Seats', command=lambda:(raise_frame(ticketing), ticket_number(selected_seats))).place(x=380, y=380)
+confirm_seat = Button(booking, bg="orange", text='Confirm Seats', command=lambda:(check_tickets(selected_seats), ticket_number(selected_seats))).place(x=380, y=380)
+
+# This definition checks whether or not the user has selected at least one seat, the next frame will not be raised if there is no seats selected
+def check_tickets(selected_seats):
+    if len(selected_seats) == 0:
+        help()
+    else:
+        raise_frame(ticketing)
 
 # This class is for creating the key labels themselves with the different colourings
 class create_key:
@@ -189,10 +226,10 @@ class create_key:
         self.key.place(x = self.x, y=self.y)
 
 # These are the labels themselves created using the create_key label
-available = create_key(booking, "green", 325, 140)
+available = create_key(booking, "grey", 325, 140)
 booked = create_key(booking, "red", 325, 185)
-clicked = create_key(booking, "blue", 325, 230)
-disability = create_key(booking, "grey", 325, 275)
+clicked = create_key(booking, "green", 325, 230)
+disability = create_key(booking, "yellow", 325, 275)
 
 # This class is for creating the named labels of the keys
 class create_key_name:
