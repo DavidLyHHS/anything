@@ -171,10 +171,13 @@ def help():
 # A button for the user to press to manually show the help window when required
 help_button = Button(booking, text="Help/Info", command=lambda:(help())).place(x=430, y=55)
 
+# A label for the key about what the colour of the seat buttons mean
 key_label = Label(booking, padx=20, bg="purple", text="Key for Seats:").place(x=355, y=100)
 
+# A button for confirming the user seats selected
 confirm_seat = Button(booking, bg="orange", text='Confirm Seats', command=lambda:(raise_frame(ticketing), ticket_number(selected_seats))).place(x=380, y=380)
 
+# This class is for creating the key labels themselves with the different colourings
 class create_key:
     def __init__(self, location, bg, x, y):
         self.location = location
@@ -185,11 +188,13 @@ class create_key:
                             height=2, width=4, relief="groove", borderwidth=3) 
         self.key.place(x = self.x, y=self.y)
 
+# These are the labels themselves created using the create_key label
 available = create_key(booking, "green", 325, 140)
 booked = create_key(booking, "red", 325, 185)
 clicked = create_key(booking, "blue", 325, 230)
 disability = create_key(booking, "grey", 325, 275)
 
+# This class is for creating the named labels of the keys
 class create_key_name:
     def __init__(self, location, text, x, y):
         self.location = location
@@ -200,11 +205,13 @@ class create_key_name:
                             height=2, width=17, relief="groove", borderwidth=3) 
         self.key_name.place(x = self.x, y=self.y)
 
+# Using the create_key_labels to create four labels which associate a key colour with meaning
 available_text = create_key_name(booking, "   =   Available Seat", 370, 140)
 booked_text = create_key_name(booking, "   =    Booked Seat", 370, 185)
 clicked_text = create_key_name(booking, "   =   Selected Seat", 370, 230)
 disability_text = create_key_name(booking, "   =  Disability Seat", 370, 275)
 
+# This class will be used for creating ticket labels that show the user how many seats they selected
 class create_ticket_number:
     def __init__(self, location, bg, x, y):
         self.location = location
@@ -215,27 +222,33 @@ class create_ticket_number:
                              height=2, width=4, relief="groove", borderwidth=3) 
         self.ticket_number.place(x = self.x, y = self.y)
 
+# This definition is for checking the amount of seats selected, and making a corresponding amount of labels to show this
 ticket_list = {}
 def ticket_number(selected_seats):
     position_x=120
     for i in range(len(selected_seats)):
         position_x = position_x + 32
-        ticket_list[(i)] = create_ticket_number(ticketing,"green", position_x, 120)
+        ticket_list[(i)] = create_ticket_number(ticketing, "green", position_x, 120)
 
-    for ticket in ticket_list:
-        print(ticket)
-
+# This label lets the user know what the create_ticket_number class is displaying 
 to_book = Label(ticketing, text="Tickets left to book: ").place(x=38, y=130)
 
+# Turns the user input into a string
 student_var=tk.StringVar()
+# This is an entry box for the user to input the amount of student tickets they want to book
 student_ticket = Entry(ticketing, textvariable = student_var, width="10").place(x=250, y=230)
 
+# Turns the user input into a string
 adult_var=tk.StringVar()
+# This is an entry box for the user to input the amount of adult tickets they want to book
 adult_ticket = Entry(ticketing, textvariable = adult_var, width="10").place(x=250, y=255)
 
+# Turns the user input into a string
 senior_var=tk.StringVar()
+# This is an entry box for the user to input the amount of senior tickets they want to book
 senior_ticket = Entry(ticketing, textvariable = senior_var, width="10").place(x=250, y=280)
 
+# This definition is used to gather the user input from the entry boxes used and then create a summary based on the input
 def on_calculate_student():
     student=student_var.get()
     adult=adult_var.get()
@@ -291,8 +304,10 @@ def on_calculate_student():
         order_summary = Label(confirmation, bg="yellow", width="30", text="Order Summary:", font= ('Century 15 bold')).place(x=50, y=340)
         Button(ticketing, text='Confirm Order', fg='White', bg= 'dark green',height = 1, width = 10, command=lambda:raise_frame(confirmation)).place(x=225, y=500)
 
+# This button is used to submit when the user has finished inputting the amount of tickets they want for each ticket type
 submit = Button(ticketing, text='Submit', fg='White', bg= 'dark green',height = 1, width = 12,command= on_calculate_student).place(x=330, y=275)
 
+# This is a help menu that pops up when clicked or as an error message for the users ticket booking
 def ticketing_help():
     ticket_help= Toplevel(window)
     ticket_help.geometry("750x250")
@@ -300,6 +315,7 @@ def ticketing_help():
     Label(ticket_help, text= "Invalid reponse or incorrect number of tickets booked!", font=('Mistral 18 bold')).place(x=150,y=80)
     ticket_help.grab_set()
 
+# This class will be used to associate ticket types with prices in a label for the user
 class create_ticket_type:
     def __init__(self, location, bg, text, x, y, padx):
         self.location = location
@@ -312,6 +328,7 @@ class create_ticket_type:
                             ) 
         self.ticket_type.place(x = self.x, y=self.y)
 
+# These are labels associated ticket types for the prices using the create_ticket_type class
 student_ticket_label = create_ticket_type(ticketing, "orange", "Student Ticket Price = $12", 100, 230, 0)
 adult_ticket_label = create_ticket_type(ticketing, "yellow", "Student Ticket Price = $18", 100, 255, 0)
 senior_ticket_label = create_ticket_type(ticketing, "green", "Student Ticket Price = $14", 100, 280, 0)
@@ -325,9 +342,12 @@ def Close():
 exit_button = Button(session, text="Exit", command=Close, bg="tomato2").place(x=440, y=15)
 exit_button = Button(booking, text="Exit", command=Close, bg="tomato2").place(x=440, y=15)
 exit_button = Button(ticketing, text="Exit", command=Close, bg="tomato2").place(x=440, y=15)
+exit_button = Button(confirmation, text="Exit", command=Close, bg="tomato2").place(x=440, y=15)
 
 Label(confirmation, text='CONFIRMATION').pack()
 Button(confirmation, text='Go to to SESSION', command=lambda:raise_frame(session)).pack()
 
+# This raises the first frame seen when the user opens the program (session)
 raise_frame(session)
+# This runs the program
 window.mainloop()
