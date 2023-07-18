@@ -21,8 +21,8 @@ date = dt.datetime.now()
 # Creates a window and customises it
 window = Tk()
 window.geometry('510x590')
+window.title("Movie Seat Booking Program")
 window.resizable(False, False)
-window.configure(bg="teal")
 
 # Brings a frame to the front if called
 def raise_frame(frame):
@@ -109,7 +109,7 @@ for movie in range(1, 4):
     movie_number = movie_number+1
     for session_number in range(1, 4):
         position_x=position_x+100
-        session_num = str("Session " + str(session_number))
+        session_num = str(session_number)+str(":00PM")
         movie_num = str("Movie " + str(movie_number))
         movie_choice(session, session_num, "darkmagenta", position_x, position_y, movie_num)
         movie_number = int(movie_number)
@@ -191,7 +191,7 @@ def seat_select(self, text):
 def help():
     top= Toplevel(window)
     top.geometry("720x250")
-    top.title("Help")
+    top.title("Help Menu")
     Label(top, text= "Select and deselect seats by clicking on the seat buttons.\n\nSelected seats appear near the top of the screen.\n\nMaximum of 10 seats per booking.\n\nIf you are unable to book a seat, it means that the seat is already booked (see key to the right).\n\nOnce you are done selecting seats, click the orange confirm button.\n\nIf you are unable to click confirm, make sure you have selected at least one seat.", font=('Arial 12 bold')).place(x=5,y=120,anchor="w")
     top.grab_set()
 
@@ -283,7 +283,7 @@ senior_var=tk.StringVar()
 senior_ticket = Entry(ticketing, textvariable = senior_var, width="10").place(x=250, y=280)
 
 # This definition is used to gather the user input from the entry boxes used and then create a summary based on the input
-def on_calculate_student():
+def submit_check():
     student=student_var.get()
     adult=adult_var.get()
     senior=senior_var.get()
@@ -330,7 +330,7 @@ def on_calculate_student():
         senior_price = senior*14
         senior_pricing = str(senior) +"x " +"Senior Ticket(s) = $" + str(senior_price)
         Label(ticketing, text=senior_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=30, y=425)
-        Label(confirmation, text=senior_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=30, y=425)
+        texty = Label(confirmation, text=senior_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=30, y=425)
 
         total = int(student_price) + int(adult_price) + int(senior_price)
         total_price = "Total cost = $" + str(total)
@@ -340,16 +340,29 @@ def on_calculate_student():
         order_summary = Label(ticketing, bg="yellow", width="30", text="Order Summary:", font= ('Century 15 bold')).place(x=30, y=340)
         order_summary = Label(confirmation, bg="yellow", width="30", text="Order Summary:", font= ('Century 15 bold')).place(x=30, y=340)
         Button(ticketing, text='Confirm Order', fg='White', bg= 'dark green',height = 1, width = 10, command=lambda:raise_frame(confirmation)).place(x=205, y=500)
+        receit = open("receit.txt", "w")
+        for i in range(10):
+            receit.write("\n")
+        receit.close()
+        receit = open("receit.txt", "r")
+        list_of_lines = receit.readlines()
+        list_of_lines[6] = student_pricing+"\n"
+        list_of_lines[7] = adult_pricing+"\n"
+        list_of_lines[8] = senior_pricing+"\n\n"
+        list_of_lines[9] = total_price+"\n"
+        receit = open("receit.txt", "w")
+        receit.writelines(list_of_lines)
+        receit.close()
 
 # This button is used to submit when the user has finished inputting the amount of tickets they want for each ticket type
-submit = Button(ticketing, text='Submit', fg='White', bg= 'dark green',height = 1, width = 12,command= on_calculate_student).place(x=330, y=275)
+submit = Button(ticketing, text='Submit', fg='White', bg= 'dark green',height = 1, width = 12,command= submit_check).place(x=330, y=275)
 
 # This is a help menu that pops up when clicked or as an error message for the users ticket booking
 def ticketing_help():
     ticket_help= Toplevel(window)
-    ticket_help.geometry("750x250")
-    ticket_help.title("Help")
-    Label(ticket_help, text= "Invalid reponse or incorrect number of tickets booked!", font=('Mistral 18 bold')).place(x=150,y=80)
+    ticket_help.geometry("420x40")
+    ticket_help.title("Ticketing Help")
+    Label(ticket_help, text= "Invalid reponse or incorrect number of tickets booked!", font=('Arial 12 bold')).place(x=5,y=20, anchor="w")
     ticket_help.grab_set()
 
 # This class will be used to associate ticket types with prices in a label for the user
@@ -371,6 +384,144 @@ adult_ticket_label = create_ticket_type(ticketing, "yellow", "Adult Ticket Price
 senior_ticket_label = create_ticket_type(ticketing, "green", "Senior Ticket Price    = $14", 100, 280, 0)
 ticket_chooser_label = create_ticket_type(ticketing, "green", "Choose your ticket(s)", 100, 200, 100)
 
+# This label tells the user that all the boxes below are input boxes for user information
+input_information = Label(confirmation, text="Please enter in user details in the boxes below: ").place(x=100, y=90)
+
+# Turns the user input into a string
+name_var=tk.StringVar()
+# This is an entry box for the user to input their name
+name_entry = Entry(confirmation, textvariable = name_var, width="29").place(x=175, y=125)
+# Labels the entry box for name input
+name_label = Label(confirmation, text="Enter name: ").place(x=100, y=125)
+
+# Turns the user input into a string
+email_var=tk.StringVar()
+# This is an entry box for the user to input their email address
+email_entry = Entry(confirmation, textvariable = email_var, width="22").place(x=217, y=150)
+# Labels the entry box for email input
+email_label = Label(confirmation, text="Enter email address: ").place(x=100, y=150)
+
+# Turns the user input into a string
+card_var=tk.StringVar()
+# This is an entry box for the user to input their credit card number
+card_entry = Entry(confirmation, textvariable = card_var, width="30").place(x=168, y=175)
+# Labels the entry box for credit card input
+card_label = Label(confirmation, text="Enter card: ").place(x=100, y=175)
+
+# Turns the user input into a string
+month_var=tk.StringVar()
+# This is an entry box for the user to input the expiry month of their credit card
+month_entry = Entry(confirmation, textvariable = month_var, width="3").place(x=285, y=200)
+# Labels the entry box for the expiry date of the users credit card
+expiry_label = Label(confirmation, text="Enter card expiry date (MM/DD): ").place(x=100, y=200)
+
+# Turns the user input into a string
+year_var=tk.StringVar()
+# This is an entry box for the user to input the expiry year of their credit card
+year_entry = Entry(confirmation, textvariable = year_var, width="3").place(x=330, y=200)
+
+# Labels inbetween the entry boxes for credit card expiry month and year
+slash_label = Label(confirmation, text=" / ").place(x=310, y=200)
+
+# Turns the user input into a string
+code_var=tk.StringVar()
+# This is an entry box for the user to input the amount of student tickets they want to book
+code_entry = Entry(confirmation, textvariable = code_var, width="4").place(x=240, y=225)
+# Labels the entry box for the card security code of the users credit card
+code_label = Label(confirmation, text="Enter card security code: ").place(x=100, y=225)
+
+# This definition checks that the responses from the entry boxes are valid
+def info_submit_check():
+    email_validity = False
+    name_validity = False
+    card_validity = False
+    month_validity = False
+    year_validity = False
+    code_validity = False
+    email=email_var.get()
+    name=name_var.get()
+    card=card_var.get()
+    month=month_var.get()
+    year=year_var.get()
+    code=code_var.get()
+    if "@" not in email:
+        email_var.set('')
+    else:
+        email_validity = True
+    if name.isdigit():
+        name_var.set('')
+    else:
+        name_validity = True
+    new_card = card.replace("-", "")
+    if new_card.isnumeric():
+        int(new_card)
+        if len(new_card) == 16:
+            card_validity = True
+        else:
+            card_var.set('')
+    else:
+        card_var.set('')
+    if month.isnumeric():
+        if int(month) > 0 and int(month) < 13:
+            month_validity = True
+        else:
+             month_var.set('')
+    else:
+        month_var.set('')
+    if year.isnumeric():
+        int(year)
+        if int(year) > 22 and int(year) < 29:
+            year_validity = True
+        else:
+            year_var.set('')
+    else:
+        year_var.set('')
+    if code.isnumeric():
+        if len(code) == 3:
+            code_validity = True
+        else:
+            code_var.set('')
+    else:
+        code_var.set('')
+    
+    # If all user input is valid, a file will be created to read and write the data
+    if email_validity == True and name_validity == True and card_validity==True and month_validity==True and year_validity==True and code_validity==True:
+        print("hi")
+        receit = open("receit.txt", "r")
+        list_of_lines = receit.readlines()
+        list_of_lines[0] = name+"\n"
+        list_of_lines[1] = email+"\n\n"
+        list_of_lines[2] = "Seats booked:\n"
+        for seat in selected_seats:
+            list_of_lines[3] = seat +" "
+        receit.close()
+        receit = open("receit.txt", "w")
+        receit.writelines(list_of_lines)
+        receit.close()
+
+        #receit.write(name+"\n")
+       # receit.write(email+"\n\n")
+        #receit.write("Seats booked:\n")
+        #for seat in selected_seats:
+            #receit.write(seat +" ")
+        #receit.write(x[0]+"\n")
+        #receit.write(x[1]+"\n")
+        #receit.write(x[2]+"\n")
+        #receit.close()
+    else:
+        error()
+
+# This button is used to submit when the user has finished inputting the amount of tickets they want for each ticket type
+info_submit = Button(confirmation, text='Submit', fg='White', bg= 'dark green',height = 1, width = 12,command= info_submit_check).place(x=190, y=275)
+
+# This is a definition which displays an error message if the user details is invalid
+def error():
+    error= Toplevel(window)
+    error.geometry("400x40")
+    error.title("Error Message")
+    Label(error, text= "Invalid response. Please re-check your user details.", font=('Arial 12 bold')).place(x=5,y=20,anchor="w")
+    error.grab_set()
+
 # Function for closing window
 def Close():
     window.destroy()
@@ -380,9 +531,6 @@ exit_button = Button(session, text="Exit", command=Close, bg="tomato2").place(x=
 exit_button = Button(booking, text="Exit", command=Close, bg="tomato2").place(x=440, y=15)
 exit_button = Button(ticketing, text="Exit", command=Close, bg="tomato2").place(x=440, y=15)
 exit_button = Button(confirmation, text="Exit", command=Close, bg="tomato2").place(x=440, y=15)
-
-Label(confirmation, text='CONFIRMATION').pack()
-Button(confirmation, text='Go to to SESSION', command=lambda:raise_frame(session)).pack()
 
 # This raises the first frame seen when the user opens the program (session)
 raise_frame(session)
