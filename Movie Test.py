@@ -4,21 +4,16 @@ import random
 import datetime as dt
 import random
  
-# initializing list
-test_list = ["A", "B", "C", "D", "E"]
-test_list2 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+# These two lists will be used for creating a random booked seat
+letter_list = ["A", "B", "C", "D", "E", "F"]
+number_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
  
-# using random.choice() to
-# get a random number
-random_let = random.choice(test_list)
-random_num = random.choice(test_list2)
+# using random.choice() to get a random letter and number from the tw lists
+random_let = random.choice(letter_list)
+random_num = random.choice(number_list)
  
-# printing random number
-hippo = (str(random_let)+str(random_num))
-
-print(hippo)
-print(random_let)
-print(random_num)
+# Create a seat that is already booked by joining the two randomly selected letter/number
+booked_seat = (str(random_let)+str(random_num))
 
 # Tracks users current date on device
 date = dt.datetime.now()
@@ -149,11 +144,12 @@ for row in range(ord("A"), ord("F") + 1):
     position_y = 95
     position_x = position_x +45
     for column in range(1, 11):
-        if column == 10:
+        if random_let == chr(row) and random_num == (column):
+            position_y=position_y+45
+            seats_list.append(seats(booking, chr(row)+str(column), "red", position_x, position_y))
+        elif column == 10:
             position_y=position_y+45
             seats_list.append(seats(booking, chr(row)+str(column), "yellow", position_x, position_y))
-        elif row == random_let and column == random_num:
-            seats_list.append(seats(booking, hippo, "purple", position_x, position_y))
         else:
             position_y=position_y+45
             seats_list.append(seats(booking, chr(row)+str(column), "grey", position_x, position_y))
@@ -166,7 +162,9 @@ Label(booking, padx=20, bg="purple", text="Selected Seats:").place(x=0, y=100)
 def seat_select(self, text):
     # Appends seat choice to the selected_seats list and turns button clicked blue 
     # Appends only if the list has less than 10 items, and seat not already inside the list
-    if text not in selected_seats and len(selected_seats) < 10:
+    if booked_seat in text:
+        print("Seat is already booked!")
+    elif text not in selected_seats and len(selected_seats) < 10:
         self.seats.configure(bg="green")
         selected_seats.append(text)
         selected_seats.sort()
@@ -178,8 +176,7 @@ def seat_select(self, text):
         self.seats.configure(bg="grey")
         selected_seats.remove(text)
         # Displays current selected_seats list in a label
-        display_seats = Label(booking, text=selected_seats, padx=5, pady=8, width=22, bg="red", borderwidth=5).place(x=135, y=90)
-
+        display_seats = Label(booking, text=selected_seats, padx=5, pady=8, width=22, bg="red", borderwidth=5).place(x=135, y=90)    
     elif text in selected_seats and "10" in text:
         self.seats.configure(bg="yellow")
         selected_seats.remove(text)
@@ -193,9 +190,9 @@ def seat_select(self, text):
 # A definition for a help window for their seat booking
 def help():
     top= Toplevel(window)
-    top.geometry("750x250")
+    top.geometry("720x250")
     top.title("Help")
-    Label(top, text= "There is a maximum of 10 seats per booking! Sorry for the inconvenience!", font=('Mistral 18 bold')).place(x=150,y=80)
+    Label(top, text= "Select and deselect seats by clicking on the seat buttons.\n\nSelected seats appear near the top of the screen.\n\nMaximum of 10 seats per booking.\n\nIf you are unable to book a seat, it means that the seat is already booked (see key to the right).\n\nOnce you are done selecting seats, click the orange confirm button.\n\nIf you are unable to click confirm, make sure you have selected at least one seat.", font=('Arial 12 bold')).place(x=5,y=120,anchor="w")
     top.grab_set()
 
 # A button for the user to press to manually show the help window when required
@@ -293,14 +290,17 @@ def on_calculate_student():
     if student.isnumeric():
         student = int(student)
     else:
+        student_var.set('')
         student = 0
     if adult.isnumeric():
         adult = int(adult)
     else:
+        adult_var.set('')
         adult= 0
     if senior.isnumeric():
         senior = int(senior)
     else:
+        senior_var.set('')
         senior = 0
 
     try:
@@ -318,28 +318,28 @@ def on_calculate_student():
         ticketing_help()
     else:
         student_price = student*12
-        student_pricing = "Student Ticket " + str(student) +"x = $" + str(student_price)
-        banana = Label(ticketing, text=student_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=50, y=375)
-        banana = Label(confirmation, text=student_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=50, y=375)
+        student_pricing = str(student) +"x " +"Student Ticket(s) = $" + str(student_price)
+        Label(ticketing, text=student_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=30, y=375)
+        Label(confirmation, text=student_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=30, y=375)
 
         adult_price =adult*18
-        adult_pricing = "Adult Ticket " + str(adult) +"x = $" + str(adult_price)
-        Label(ticketing, text=adult_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=50, y=400)
-        Label(confirmation, text=adult_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=50, y=400)
+        adult_pricing = str(adult) +"x " +"Adult Ticket(s) = $" + str(adult_price)
+        Label(ticketing, text=adult_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=30, y=400)
+        Label(confirmation, text=adult_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=30, y=400)
 
         senior_price = senior*14
-        senior_pricing = "Senior Ticket " + str(senior) +"x = $" + str(senior_price)
-        Label(ticketing, text=senior_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=50, y=425)
-        Label(confirmation, text=senior_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=50, y=425)
+        senior_pricing = str(senior) +"x " +"Senior Ticket(s) = $" + str(senior_price)
+        Label(ticketing, text=senior_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=30, y=425)
+        Label(confirmation, text=senior_pricing, bg="yellow", width="30", font= ('Century 15 bold')).place(x=30, y=425)
 
         total = int(student_price) + int(adult_price) + int(senior_price)
         total_price = "Total cost = $" + str(total)
-        Label(ticketing, text=total_price, bg="yellow", width="30", font= ('Century 15 bold')).place(x=50, y=450)
-        Label(confirmation, text=total_price, bg="yellow", width="30", font= ('Century 15 bold')).place(x=50, y=450)
+        Label(ticketing, text=total_price, bg="yellow", width="30", font= ('Century 15 bold')).place(x=30, y=450)
+        Label(confirmation, text=total_price, bg="yellow", width="30", font= ('Century 15 bold')).place(x=30, y=450)
 
-        order_summary = Label(ticketing, bg="yellow", width="30", text="Order Summary:", font= ('Century 15 bold')).place(x=50, y=340)
-        order_summary = Label(confirmation, bg="yellow", width="30", text="Order Summary:", font= ('Century 15 bold')).place(x=50, y=340)
-        Button(ticketing, text='Confirm Order', fg='White', bg= 'dark green',height = 1, width = 10, command=lambda:raise_frame(confirmation)).place(x=225, y=500)
+        order_summary = Label(ticketing, bg="yellow", width="30", text="Order Summary:", font= ('Century 15 bold')).place(x=30, y=340)
+        order_summary = Label(confirmation, bg="yellow", width="30", text="Order Summary:", font= ('Century 15 bold')).place(x=30, y=340)
+        Button(ticketing, text='Confirm Order', fg='White', bg= 'dark green',height = 1, width = 10, command=lambda:raise_frame(confirmation)).place(x=205, y=500)
 
 # This button is used to submit when the user has finished inputting the amount of tickets they want for each ticket type
 submit = Button(ticketing, text='Submit', fg='White', bg= 'dark green',height = 1, width = 12,command= on_calculate_student).place(x=330, y=275)
@@ -367,8 +367,8 @@ class create_ticket_type:
 
 # These are labels associated ticket types for the prices using the create_ticket_type class
 student_ticket_label = create_ticket_type(ticketing, "orange", "Student Ticket Price = $12", 100, 230, 0)
-adult_ticket_label = create_ticket_type(ticketing, "yellow", "Student Ticket Price = $18", 100, 255, 0)
-senior_ticket_label = create_ticket_type(ticketing, "green", "Student Ticket Price = $14", 100, 280, 0)
+adult_ticket_label = create_ticket_type(ticketing, "yellow", "Adult Ticket Price     = $18", 100, 255, 0)
+senior_ticket_label = create_ticket_type(ticketing, "green", "Senior Ticket Price    = $14", 100, 280, 0)
 ticket_chooser_label = create_ticket_type(ticketing, "green", "Choose your ticket(s)", 100, 200, 100)
 
 # Function for closing window
