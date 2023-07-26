@@ -589,7 +589,7 @@ tk.Entry(confirmation, textvariable=month_var, width="3"
          ).place(x=285, y=200)
 # Labels the entry box for the expiry date of the users credit card
 tk.Label(confirmation, bg="#313D5A", fg="white",
-         text="Enter card expiry date (MM/DD): ").place(x=100, y=200)
+         text="Enter card expiry date (MM/YY): ").place(x=100, y=200)
 # Turns the user input into a string
 year_var = tk.StringVar()
 # Entry box for the user to input the expiry year of their credit card
@@ -626,7 +626,13 @@ def info_submit_check():
         email_validity = True
     if name.isdigit():
         name_var.set('')
+        name_error = tk.Label(confirmation, bg="#D6D6D6", fg="red", text="Please enter letters"
+         ).place(x=350, y=125)
     else:
+        if 'name_error' in locals():
+            name_error.destroy()
+        else:
+            pass
         name_validity = True
     new_card = card.replace("-", "")
     final_card = new_card.replace(" ", "")
