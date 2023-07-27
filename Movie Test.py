@@ -572,7 +572,9 @@ tk.Label(confirmation, fg="white", bg="#313D5A",
 # Turns the user input into a string
 name_var = tk.StringVar()
 # This is an entry box for the user to input their name
-tk.Entry(confirmation, textvariable=name_var, width="29").place(x=175, y=125)
+name_entry = tk.Entry(confirmation, textvariable=name_var, width="29")
+name_entry.place(x=175, y=125)
+name_entry.insert(0, "Please type here...")
 # Labels the entry box for name input
 tk.Label(confirmation, bg="#313D5A", fg="white", text="Enter name: "
          ).place(x=100, y=125)
@@ -580,7 +582,9 @@ tk.Label(confirmation, bg="#313D5A", fg="white", text="Enter name: "
 # Turns the user input into a string
 email_var = tk.StringVar()
 # This is an entry box for the user to input their email address
-tk.Entry(confirmation, textvariable=email_var, width="22").place(x=217, y=150)
+email_entry = tk.Entry(confirmation, textvariable=email_var, width="22")
+email_entry.place(x=217, y=150)
+email_entry.insert(0, "Please type here...")
 # Labels the entry box for email input
 tk.Label(confirmation, bg="#313D5A", fg="white", text="Enter email address: "
          ).place(x=100, y=150)
@@ -588,8 +592,9 @@ tk.Label(confirmation, bg="#313D5A", fg="white", text="Enter email address: "
 # Turns the user input into a string
 card_var = tk.StringVar()
 # This is an entry box for the user to input their credit card number
-tk.Entry(confirmation, textvariable=card_var, width="30"
-         ).place(x=168, y=175)
+card_entry = tk.Entry(confirmation, textvariable=card_var, width="30")
+card_entry.place(x=168, y=175)
+card_entry.insert(0, "XXXX-XXXX-XXXX-XXXX")
 # Labels the entry box for credit card input
 tk.Label(confirmation, bg="#313D5A", fg="white", text="Enter card: "
          ).place(x=100, y=175)
@@ -597,26 +602,71 @@ tk.Label(confirmation, bg="#313D5A", fg="white", text="Enter card: "
 # Turns the user input into a string
 month_var = tk.StringVar()
 # Entry box for the user to input the expiry month of their credit card
-tk.Entry(confirmation, textvariable=month_var, width="3"
-         ).place(x=285, y=200)
+expiry_entry = tk.Entry(confirmation, textvariable=month_var, width="3")
+expiry_entry.place(x=285, y=200)
+expiry_entry.insert(0, "XX")
 # Labels the entry box for the expiry date of the users credit card
 tk.Label(confirmation, bg="#313D5A", fg="white",
          text="Enter card expiry date (MM/YY): ").place(x=100, y=200)
 # Turns the user input into a string
 year_var = tk.StringVar()
 # Entry box for the user to input the expiry year of their credit card
-tk.Entry(confirmation, textvariable=year_var, width="3").place(x=330, y=200)
+year_entry = tk.Entry(confirmation, textvariable=year_var, width="3")
+year_entry.place(x=330, y=200)
+year_entry.insert(0, "XX")
 # Labels inbetween the entry boxes for credit card expiry month and year
 tk.Label(confirmation, bg="#313D5A", fg="white", text=" / "
          ).place(x=310, y=200)
 # Turns the user input into a string
 code_var = tk.StringVar()
 # Entry box for user to input their card security code
-tk.Entry(confirmation, textvariable=code_var,
-          width="4", show="*").place(x=240, y=225)
+code_entry = tk.Entry(confirmation, textvariable=code_var,
+          width="4", show="*")
+code_entry.place(x=240, y=225)
+code_entry.insert(0, "XXX")
 # Labels the entry box for the card security code of the users credit card
 tk.Label(confirmation, bg="#313D5A", fg="white",
          text="Enter card security code: ").place(x=100, y=225)
+
+
+def name_temp(e):
+   """Deletes temporary text"""
+   name_entry.delete(0,"end")
+
+
+def email_temp(e):
+   """Deletes temporary text"""
+   email_entry.delete(0,"end")
+
+
+def card_temp(e):
+   """Deletes temporary text"""
+   card_entry.delete(0,"end")
+
+
+def expiry_temp(e):
+   """Deletes temporary text"""
+   expiry_entry.delete(0,"end")
+
+
+def year_temp(e):
+   """Deletes temporary text"""
+   year_entry.delete(0,"end")
+
+
+def code_temp(e):
+   """Deletes temporary text"""
+   code_entry.delete(0,"end")
+
+ 
+# Binds the FocusIn event to the entry boxes
+name_entry.bind("<FocusIn>", name_temp)
+email_entry.bind("<FocusIn>", email_temp)
+card_entry.bind("<FocusIn>", card_temp)
+expiry_entry.bind("<FocusIn>", expiry_temp)
+year_entry.bind("<FocusIn>", year_temp)
+code_entry.bind("<FocusIn>", code_temp)
+
 
 def info_submit_check():
     """Check the validity of the user responses."""
