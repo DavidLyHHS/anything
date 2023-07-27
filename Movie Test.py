@@ -98,8 +98,8 @@ class MovieTypes:
             self.location,
             text=self.text,
             bg=self.bg,
-            padx=50,
-            pady=50,
+            padx=20,
+            pady=20,
             fg="white",
             font=("Arial", "16", "bold"),
             relief="groove",
@@ -110,9 +110,16 @@ class MovieTypes:
 
 # Create three movie labels
 position_y = -20
+movie_number = 0
 for movie in range(1, 4):
+    movie_number = movie_number + 1
     position_y = position_y + 150
-    movie_num = str("Movie ") + str(movie)
+    if movie_number == 1:
+        movie_num = str("Misadventure\nof Cancan")
+    elif movie_number == 2:
+        movie_num = str("The Duke of\nthe Hoops II")
+    else:
+        movie_num = str("Henry Totter:\nChalice of Sea")
     MovieTypes(session, movie_num, "#313D5A", 0, position_y)
 
 
@@ -181,7 +188,12 @@ for movie in range(1, 4):
     for session_number in range(1, 4):
         position_x = position_x + 100
         session_num = str(session_number) + str(":00PM")
-        movie_num = str("Movie " + str(movie_number))
+        if movie_number == 1:
+            movie_num = str("Misadventure of Cancan")
+        elif movie_number == 2:
+            movie_num = str("The Duke of the Hoops II")
+        else:
+            movie_num = str("Henry Totter: Chalice of Sea")
         MovieChoice(session, session_num, "#73628A",
                     position_x, position_y, movie_num)
 
@@ -599,12 +611,12 @@ tk.Label(confirmation, bg="#313D5A", fg="white", text=" / "
          ).place(x=310, y=200)
 # Turns the user input into a string
 code_var = tk.StringVar()
-# Entry box for user to input the amount of student tickets they want to book
-tk.Entry(confirmation, textvariable=code_var, width="4").place(x=240, y=225)
+# Entry box for user to input their card security code
+tk.Entry(confirmation, textvariable=code_var,
+          width="4", show="*").place(x=240, y=225)
 # Labels the entry box for the card security code of the users credit card
 tk.Label(confirmation, bg="#313D5A", fg="white",
          text="Enter card security code: ").place(x=100, y=225)
-
 
 def info_submit_check():
     """Check the validity of the user responses."""
@@ -622,49 +634,75 @@ def info_submit_check():
     code = code_var.get()
     if "@" not in email:
         email_var.set('')
+        tk.Label(confirmation, bg="#D6D6D6", fg="red",
+                 text="Please include '@'.").place(x=350, y=150)
     else:
+        tk.Label(confirmation, bg="#D6D6D6", fg="#D6D6D6",
+                 text="Please include '@'.").place(x=350, y=150)
         email_validity = True
-    if name.isdigit():
-        name_var.set('')
-        name_error = tk.Label(confirmation, bg="#D6D6D6", fg="red", text="Please enter letters"
-         ).place(x=350, y=125)
-    else:
-        if 'name_error' in locals():
-            name_error.destroy()
-        else:
-            pass
+    if name.isalpha():
+        tk.Label(confirmation, bg="#D6D6D6", fg="#D6D6D6",
+                 text="Please only enter letters.").place(x=350, y=125)
         name_validity = True
+    else:
+        name_var.set('')
+        tk.Label(confirmation, bg="#D6D6D6", fg="red",
+                 text="Please only enter letters.").place(x=350, y=125)
     new_card = card.replace("-", "")
     final_card = new_card.replace(" ", "")
     if final_card.isnumeric():
         int(final_card)
         if len(final_card) == 16:
             card_validity = True
+            tk.Label(confirmation, bg="#D6D6D6", fg="#D6D6D6",
+                     text="Please enter 16 digits.").place(x=350, y=175)
         else:
+            tk.Label(confirmation, bg="#D6D6D6", fg="red",
+                     text="Please enter 16 digits.").place(x=350, y=175)
             card_var.set('')
     else:
+        tk.Label(confirmation, bg="#D6D6D6", fg="red",
+                 text="Please enter 16 digits.").place(x=350, y=175)
         card_var.set('')
     if month.isnumeric():
         if int(month) > 0 and int(month) < 13:
+            tk.Label(confirmation, bg="#D6D6D6", fg="#D6D6D6",
+                     text="MM (1 - 12), YY (23 - 27)").place(x=350, y=200)
             month_validity = True
         else:
+            tk.Label(confirmation, bg="#D6D6D6", fg="red",
+                     text="MM (1 - 12), YY (23 - 27)").place(x=350, y=200)
             month_var.set('')
     else:
+        tk.Label(confirmation, bg="#D6D6D6", fg="red",
+                     text="MM (1 - 12), YY (23 - 27)").place(x=350, y=200)
         month_var.set('')
     if year.isnumeric():
         int(year)
         if int(year) > 22 and int(year) < 29:
+            tk.Label(confirmation, bg="#D6D6D6", fg="#D6D6D6",
+                     text="MM (1 - 12), YY (23 - 27)").place(x=350, y=200)
             year_validity = True
         else:
+            tk.Label(confirmation, bg="#D6D6D6", fg="red",
+                     text="MM (1 - 12), YY (23 - 27)").place(x=350, y=200)
             year_var.set('')
     else:
+        tk.Label(confirmation, bg="#D6D6D6", fg="red",
+                 text="MM (1 - 12), YY (23 - 27)").place(x=350, y=200)
         year_var.set('')
     if code.isnumeric():
         if len(code) == 3:
+            tk.Label(confirmation, bg="#D6D6D6", fg="#D6D6D6",
+                     text="Integers only (MUST BE 3)").place(x=350, y=225)
             code_validity = True
         else:
+            tk.Label(confirmation, bg="#D6D6D6", fg="red",
+                     text="Integers only (MUST BE 3)").place(x=350, y=225)
             code_var.set('')
     else:
+        tk.Label(confirmation, bg="#D6D6D6", fg="red",
+                 text="Integers only (MUST BE 3)").place(x=350, y=225)
         code_var.set('')
 
     # If all user input is valid, read and write the data into text file
