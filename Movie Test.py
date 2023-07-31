@@ -26,9 +26,17 @@ date = dt.datetime.now()
 
 # Creates a window and customises it
 window = tk.Tk()
-window.geometry("510x590")
+width = 510
+height = 590
+window_x = 0
+window_y = 0
 window.title("Movie Seat Booking Program")
 window.resizable(False, False)
+screen_height = window.winfo_screenheight()
+screen_width = window.winfo_screenwidth()
+window_x = int(screen_width/3)
+window_y = int(screen_height/5)
+window.geometry(f"{width}x{height}+{window_x}+{window_y}")
 
 
 def raise_frame(frame):
@@ -305,16 +313,24 @@ def seat_select(self, text):
 
 def help():
     """Help window for seat booking."""
-    top = tk.Toplevel(window)
-    top.geometry("450x250")
+    top = tk.Toplevel(window, bg="#313D5A")
+    top_width = 450
+    top_height = 250
+    top_x = 0
+    top_y = 0
     top.title("Help Menu")
+    top_screen_height = window.winfo_screenheight()
+    top_screen_width = window.winfo_screenwidth()
+    top_x = int(top_screen_width/3)
+    top_y = int(top_screen_height/5)
+    top.geometry(f"{top_width}x{top_height}+{top_x}+{top_y}")
     tk.Label(top, text="Select and deselect seats by clicking seat buttons."
              "\n\nSelected seats appear near the top of the screen.\n\n"
              "Maximum of 10 seats per booking.\n\n"
              "If unable to book seat, seat is already booked (See key)\n\n"
              "Once done selecting seats, click the confirm button.\n\n"
              "Make sure you have selected at least one seat.",
-             font=('Arial 12 bold')).place(x=5, y=120, anchor="w")
+             font=('Arial 12 bold'), fg="white", bg="#313D5A").place(x=5, y=120, anchor="w")
     top.grab_set()
 
 # A button for the user to press to manually show the help window when required
@@ -464,7 +480,7 @@ def submit_check():
         student_var.set('')
         adult_var.set('')
         senior_var.set('')
-        ticketing_help()
+        ticketing_help(amount_of_tickets)
     else:
         student_price = student*12
         student_pricing = str(student) + "x " +\
@@ -526,14 +542,26 @@ tk.Button(ticketing, text='Submit', fg='White', bg='dark green',
           height=1, width=12, command=submit_check).place(x=330, y=275)
 
 
-def ticketing_help():
+def ticketing_help(amount_of_tickets):
     """Help menu when clicked or when error occurs."""
     ticket_help = tk.Toplevel(window)
-    ticket_help.geometry("420x40")
+    ticket_help.configure(bg="#313D5A")
+    ticket_help_width = 510
+    ticket_help_height = 40
+    ticket_help_x = 0
+    ticket_help_y = 0
     ticket_help.title("Ticketing Help")
+    ticket_help_screen_height = window.winfo_screenheight()
+    ticket_help_screen_width = window.winfo_screenwidth()
+    ticket_help_x = int(ticket_help_screen_width/3)
+    ticket_help_y = int(ticket_help_screen_height/5)
+    ticket_help.geometry(f"{ticket_help_width}x{ticket_help_height}+{ticket_help_x}+{ticket_help_y}")
+    ticket_help.geometry("520x40")
     tk.Label(ticket_help,
-             text="Invalid reponse or incorrect number of tickets booked!",
-             font=('Arial 12 bold')).place(x=5, y=20, anchor="w")
+             text="Incorrect amount of tickets booked.\n You have booked "
+             + str(amount_of_tickets) + " seat(s) when you have selected " 
+             + str(len(selected_seats)) + " seat(s)",
+             font=('Arial 12 bold'), fg="white", bg="#313D5A").place(x=5, y=20, anchor="w")
     ticket_help.grab_set()
 
 
@@ -781,11 +809,21 @@ def info_submit_check():
 def order_confirmed():
     """Order confirmed message window."""
     order_confirmed = tk.Toplevel(window)
-    order_confirmed.geometry("600x40")
+    order_confirmed.configure(bg="#313D5A")
+    order_confirmed_width = 600
+    order_confirmed_height = 40
+    order_confirmed_x = 0
+    order_confirmed_y = 0
+    order_confirmed.title("Ticketing Help")
+    order_confirmed_screen_height = window.winfo_screenheight()
+    order_confirmed_screen_width = window.winfo_screenwidth()
+    order_confirmed_x = int(order_confirmed_screen_width/3)
+    order_confirmed_y = int(order_confirmed_screen_height/5)
+    order_confirmed.geometry(f"{order_confirmed_width}x{order_confirmed_height}+{order_confirmed_x}+{order_confirmed_y}")
     order_confirmed.title("Order Confirmed!")
     tk.Label(order_confirmed, text="Your booking has been confirmed! "
              "Please check 'receit.txt' for your receit.",
-             font=('Arial 12 bold')).place(x=5, y=20, anchor="w")
+             font=('Arial 12 bold'), fg="white", bg="#313D5A").place(x=5, y=20, anchor="w")
     order_confirmed.grab_set()
 
 
@@ -798,10 +836,20 @@ tk.Button(confirmation, text='Submit', fg='White', bg='dark green',
 def error():
     """Display error message if user details are invalid."""
     error = tk.Toplevel(window)
-    error.geometry("400x40")
+    error.configure(bg="#313D5A")
+    error_width = 400
+    error_height = 40
+    error_x = 0
+    error_y = 0
     error.title("Error Message")
+    error_screen_height = window.winfo_screenheight()
+    error_screen_width = window.winfo_screenwidth()
+    error_x = int(error_screen_width/3)
+    error_y = int(error_screen_height/5)
+    error.geometry(f"{error_width}x{error_height}+{error_x}+{error_y}")
     tk.Label(error, text="Invalid response. "
-             "Please re-check your user details.", font=('Arial 12 bold')
+             "Please re-check your user details.", 
+             font=('Arial 12 bold'), fg="white", bg="#313D5A"
              ).place(x=5, y=20, anchor="w")
     error.grab_set()
 
